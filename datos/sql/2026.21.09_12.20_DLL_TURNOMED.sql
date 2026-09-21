@@ -1,0 +1,3 @@
+
+DROP DATABASE if EXISTS turnomed;
+CREATE DATABASE turnomed;
