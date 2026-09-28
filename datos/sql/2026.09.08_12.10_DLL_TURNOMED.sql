@@ -22,10 +22,10 @@ CREATE TABLE Usuario(
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE,
-    contrasena VARCHAR(225) NOT NULL
+    contrasena VARCHAR(225) NOT NULL,
     rut VARCHAR(20) UNIQUE,
     telefono VARCHAR(20),
-    id_direccion INT
+    id_direccion INT,
     CONSTRAINT fk_usuario_direccion FOREIGN KEY (id_direccion) REFERENCES Direccion(id_direccion)
 );
 
