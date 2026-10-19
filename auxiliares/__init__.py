@@ -1,0 +1,1 @@
+from auxiliares.data_aplicacion import nombre_aplicacion, version_aplicacion
