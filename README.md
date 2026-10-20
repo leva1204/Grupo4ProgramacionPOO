@@ -1,4 +1,4 @@
-# Medica In™ — módulos CRUD de horarios, turnos y pacientes
+# Medica In™
 
 ## Organización por capas
 
