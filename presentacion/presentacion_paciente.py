@@ -1,6 +1,6 @@
 """Interfaz de consola para administrar pacientes."""
 from getpass import getpass
-
+from auxiliares.validaciones import validar_rut
 from auxiliares.tablas import mostrar_tabla
 from negocio.negocio_paciente import (
     crear_paciente,
@@ -27,13 +27,19 @@ def solicitar_crear_paciente():
         nombre = input("Nombre completo: ").strip()
         correo = input("Correo: ").strip()
         contrasena = getpass("Contraseña (mínimo 8 caracteres): ")
-        rut = input("RUT: ").strip()
+        while True:
+            rut = input("RUT (ej: 12345678-K): ").strip()
+            if validar_rut(rut):
+                break
+            print(" RUT inválido. Inténtelo de nuevo.")
+
         telefono = input("Teléfono (opcional): ").strip() or None
         id_direccion = input("ID de dirección: ").strip()
         paciente = crear_paciente(
             nombre, correo, contrasena, rut, telefono, id_direccion
         )
         print(f"Paciente inscrito correctamente. ID: {paciente.id_usuario_id}")
+
     except Exception as exc:
         print(f"No se pudo inscribir el paciente: {exc}")
 
