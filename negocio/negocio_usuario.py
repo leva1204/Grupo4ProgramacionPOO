@@ -3,17 +3,21 @@
 Los datos personales exclusivos del paciente (RUT, teléfono y dirección) no
 pertenecen a Usuario; se gestionan desde negocio_paciente.
 """
+import hashlib
 import re
-
 from peewee import IntegrityError
 
 from datos.modelos.models import Turno
 from datos.repositorios.repositorio_usuario import RepositorioUsuario
 
 
+def _hash_contrasena(contrasena):
+    return hashlib.sha256(contrasena.encode("utf-8")).hexdigest()
+
+
 def _correo(valor):
     valor = (valor or "").strip().lower()
-    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", valor):
+    if not re.fullmatch(r"[^\s]+@[^\s]+\.[^\s]+", valor):
         raise ValueError("Ingrese un correo válido.")
     return valor
 
@@ -27,8 +31,11 @@ def crear_usuario(nombre, correo, contrasena):
         raise ValueError("La contraseña debe tener al menos 8 caracteres.")
     if RepositorioUsuario.obtener_por_correo(correo):
         raise ValueError("Ese correo ya está registrado.")
+
+    contrasena_hash = _hash_contrasena(contrasena)
+
     try:
-        return RepositorioUsuario.guardar(nombre, correo, contrasena)
+        return RepositorioUsuario.guardar(nombre, correo, contrasena_hash)
     except IntegrityError as exc:
         raise ValueError("No se pudo crear el usuario; revise el correo.") from exc
 
@@ -64,7 +71,7 @@ def actualizar_usuario(id_usuario, nombre=None, correo=None, contrasena=None):
     if contrasena:
         if len(contrasena) < 8:
             raise ValueError("La contraseña debe tener al menos 8 caracteres.")
-        datos["contrasena"] = contrasena
+        datos["contrasena"] = _hash_contrasena(contrasena)
 
     if not datos:
         raise ValueError("No se ingresaron cambios.")
