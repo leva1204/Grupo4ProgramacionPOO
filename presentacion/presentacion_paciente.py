@@ -1,6 +1,6 @@
 """Interfaz de consola para administrar pacientes."""
 from getpass import getpass
-from auxiliares.validaciones import validar_rut
+from auxiliares.validaciones import validar_rut, validar_correo
 from auxiliares.tablas import mostrar_tabla
 from negocio.negocio_paciente import (
     crear_paciente,
@@ -8,7 +8,7 @@ from negocio.negocio_paciente import (
     consultar_paciente,
     actualizar_paciente,
     eliminar_paciente,
-)
+                                     )
 
 
 def _mostrar(paciente):
@@ -20,18 +20,28 @@ def _mostrar(paciente):
     print(f"Teléfono: {paciente.telefono or '-'}")
     print(f"ID dirección: {paciente.id_direccion_id}")
 
-
 def solicitar_crear_paciente():
     print("\n--- Inscribir paciente ---")
     try:
         nombre = input("Nombre completo: ").strip()
-        correo = input("Correo: ").strip()
-        contrasena = getpass("Contraseña (mínimo 8 caracteres): ")
+
+        # Bloquea el avance hasta que el correo sea válido
         while True:
-            rut = input("RUT (ej: 12345678-K): ").strip()
+            correo = input("Correo (ej: usuario@dominio.com): ").strip()
+            valido, mensaje = validar_correo(correo)
+            if valido:
+                break
+            print(f"\nCorreo inválido: {mensaje}")
+            print("Debe ingresar un correo válido para continuar.\n")
+
+        contrasena = getpass("Contraseña (mínimo 8 caracteres): ")
+
+        # Bloquea el avance hasta que el RUT sea válido y sin puntos
+        while True:
+            rut = input("RUT sin puntos (ej: 12345678-K): ").strip()
             if validar_rut(rut):
                 break
-            print(" RUT inválido. Inténtelo de nuevo.")
+            print("RUT inválido. Ingréselo sin puntos y con guion (ej: 12345678-K). Inténtelo de nuevo.")
 
         telefono = input("Teléfono (opcional): ").strip() or None
         id_direccion = input("ID de dirección: ").strip()
