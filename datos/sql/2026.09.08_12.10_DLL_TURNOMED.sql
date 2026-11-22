@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS turnomed;
-CREATE DATABASE turnomed;
+DROP DATABASE IF EXISTS medica_in;
+CREATE DATABASE medica_in;
 
-USE turnomed;
+USE medica_in;
 
 CREATE TABLE Direccion (
     id_direccion INT AUTO_INCREMENT PRIMARY KEY,
@@ -26,6 +26,7 @@ CREATE TABLE Usuario (
 
 CREATE TABLE pacientes (
     id_usuario INT PRIMARY KEY,
+    nombre_paciente VARCHAR(100) NOT NULL,
     rut VARCHAR(20) NOT NULL UNIQUE,
     telefono VARCHAR(20),
     id_direccion INT NOT NULL,
@@ -37,12 +38,22 @@ CREATE TABLE pacientes (
 
 CREATE TABLE Medico (
     id_usuario INT PRIMARY KEY,
+    nombre_medico VARCHAR(100) NOT NULL,
     numero_formacion VARCHAR(50) NOT NULL UNIQUE,
     id_especialidad INT NOT NULL,
     CONSTRAINT fk_medico_usuario FOREIGN KEY (id_usuario)
         REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
     CONSTRAINT fk_medico_especialidad FOREIGN KEY (id_especialidad)
         REFERENCES Especialidad(id_especialidad)
+);
+
+CREATE TABLE enfermero (
+    id_usuario INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    rut VARCHAR(12) NOT NULL UNIQUE,
+    telefono VARCHAR(20) NULL,
+    area VARCHAR(80) NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
 CREATE TABLE Agenda (

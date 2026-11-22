@@ -35,25 +35,38 @@ INSERT INTO Usuario (id_usuario, nombre, correo, contrasena) VALUES
 (7, 'Valentina Rojas', 'valentina.rojas@example.com', 'clave_demo_07'),
 (8, 'Jorge Muñoz', 'jorge.munoz@example.com', 'clave_demo_08'),
 (9, 'Daniela Silva', 'daniela.silva@example.com', 'clave_demo_09'),
-(10, 'Pablo Contreras', 'pablo.contreras@example.com', 'clave_demo_10');
+(10, 'Pablo Contreras', 'pablo.contreras@example.com', 'clave_demo_10'),
+(11, 'Camila Fernanda Rojas Soto', 'camila.rojas@turnomed.cl', 'clave_demo_11'),
+(12, 'Matías Ignacio Valdés Muñoz', 'matias.valdes@turnomed.cl', 'clave_demo_12'),
+(13, 'Valentina Paz Contreras Silva', 'valentina.contreras@turnomed.cl', 'clave_demo_13'),
+(14, 'Sebastián Andrés Morales Pinto', 'sebastian.morales@turnomed.cl', 'clave_demo_14'),
+(15, 'Francisca Javiera Herrera Díaz', 'francisca.herrera@turnomed.cl', 'clave_demo_15');
 
--- 4. pacientes
-INSERT INTO pacientes (id_usuario, rut, telefono, id_direccion) VALUES
-(6, '16.666.666-6', '+56966666666', 6),
-(7, '17.777.777-7', '+56977777777', 7),
-(8, '18.888.888-8', '+56988888888', 8),
-(9, '19.999.999-9', '+56999999999', 9),
-(10, '10.101.010-1', '+56910101010', 10);
+-- 4. enfermero
+INSERT INTO enfermero (id_usuario, nombre, rut, telefono, area) VALUES
+(11, 'Camila Fernanda Rojas Soto', '19458321-1','+56984123901', 'Urgencias'),
+(12, 'Matías Ignacio Valdés Muñoz', '18734912-0', '+56975234812', 'UCI Adulto'),
+(13, 'Valentina Paz Contreras Silva', '20194856-5', '+56991345723', 'Pediatría'),
+(14, 'Sebastián Andrés Morales Pinto', '17629483-5', NULL, 'Pabellón Quirúrgico'),
+(15, 'Francisca Javiera Herrera Díaz', '21045789-4', '+56962456934', 'Medicina Interna');
 
--- 5. Medico
-INSERT INTO Medico (id_usuario, numero_formacion, id_especialidad) VALUES
-(1, 'REG-MED-001', 1),
-(2, 'REG-MED-002', 2),
-(3, 'REG-MED-003', 3),
-(4, 'REG-MED-004', 4),
-(5, 'REG-MED-005', 5);
+-- 5. pacientes
+INSERT INTO pacientes (id_usuario, nombre_paciente, rut, telefono, id_direccion) VALUES
+(6, 'Felipe Morales', '16.666.666-6', '+56966666666', 6),
+(7, 'Valentina Rojas', '17.777.777-7', '+56977777777', 7),
+(8, 'Jorge Muñoz', '18.888.888-8', '+56988888888', 8),
+(9, 'Daniela Silva', '19.999.999-9', '+56999999999', 9),
+(10, 'Pablo Contreras', '10.101.010-1', '+56910101010', 10);
 
--- 6. Agenda
+-- 6. Medico
+INSERT INTO Medico (id_usuario, nombre_medico, numero_formacion, id_especialidad) VALUES
+(1,'Dra. Ana Perez', 'REG-MED-001', 1),
+(2, 'Dr. Carlos Soto', 'REG-MED-002', 2),
+(3, 'Dra. Maria Gonzalez', 'REG-MED-003', 3),
+(4, 'Dr. Diego Ramirez', 'REG-MED-004', 4),
+(5, 'Dra. Camila Torres', 'REG-MED-005', 5);
+
+-- 7. Agenda
 INSERT INTO Agenda (id_agenda, jornada_laboral) VALUES
 (1, 'Lunes a viernes, jornada de mañana'),
 (2, 'Lunes a viernes, jornada de tarde'),
@@ -66,7 +79,7 @@ INSERT INTO Agenda (id_agenda, jornada_laboral) VALUES
 (9, 'Lunes, miercoles y viernes'),
 (10, 'Martes y jueves, jornada completa');
 
--- 7. Horario
+-- 8. Horario
 INSERT INTO Horario
 (id_horario, dia, horario_inicio, horario_fin, disponible, id_agenda, id_medico)
 VALUES
@@ -81,17 +94,16 @@ VALUES
 (9, 'Jueves', '08:00:00', '12:00:00', TRUE, 9, 4),
 (10, 'Viernes', '13:00:00', '17:00:00', TRUE, 10, 5);
 
--- 8. Turno
-INSERT INTO Turno
-(id_turno, fecha, hora, estado, id_paciente, id_medico, id_agenda)
-VALUES
-(1, '2026-11-02', '08:30:00', 'Reservado', 6, 1, 1),
-(2, '2026-11-03', '14:30:00', 'Confirmado', 7, 2, 2),
-(3, '2026-11-04', '09:30:00', 'Reservado', 8, 3, 3),
-(4, '2026-11-05', '09:00:00', 'Atendido', 9, 4, 4),
-(5, '2026-11-06', '15:00:00', 'Confirmado', 10, 5, 5),
-(6, '2026-11-09', '10:30:00', 'Cancelado', 6, 2, 6),
-(7, '2026-11-10', '09:30:00', 'Reservado', 7, 3, 7),
-(8, '2026-11-11', '15:30:00', 'Confirmado', 8, 4, 8),
-(9, '2026-11-12', '08:30:00', 'Reservado', 9, 5, 9),
-(10, '2026-11-13', '13:30:00', 'Reservado', 10, 1, 10);
+-- 9. Turno
+INSERT INTO Turno 
+(fecha, hora, estado, id_paciente, id_medico, id_agenda) VALUES
+('2026-11-02', '08:30:00', 'Reservado', 1, 1, 1),
+('2026-11-03', '14:30:00', 'Confirmado', 2, 2, 2),
+('2026-11-04', '09:30:00', 'Reservado', 3, 3, 3),
+('2026-11-05', '09:00:00', 'Atendido', 4, 4, 4),
+('2026-11-06', '15:00:00', 'Confirmado', 5, 5, 5),
+('2026-11-09', '10:30:00', 'Cancelado', 1, 1, 6),
+('2026-11-10', '09:30:00', 'Reservado', 2, 2, 7),
+('2026-11-11', '15:30:00', 'Confirmado', 3, 3, 8),
+('2026-11-12', '08:30:00', 'Reservado', 4, 4, 9),
+('2026-11-13', '13:30:00', 'Reservado', 5, 5, 10);
