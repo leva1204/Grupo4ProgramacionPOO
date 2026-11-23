@@ -5,6 +5,8 @@ import re
 from peewee import IntegrityError
 from datos.modelos.models import Direccion, Usuario, Paciente, Turno
 from datos.repositorios.repositorio_paciente import RepositorioPaciente
+from seguridad.sesion import requiere_administrador
+from auxiliares.validaciones import validar_contrasena
 
 
 def _hash_contrasena(contrasena):
@@ -28,6 +30,7 @@ def _validar_direccion(id_direccion):
     return direccion.id_direccion
 
 
+@requiere_administrador
 def crear_paciente(nombre, correo, contrasena, rut, telefono=None, id_direccion=None):
     nombre = (nombre or "").strip()
     correo = (correo or "").strip().lower()
@@ -35,8 +38,9 @@ def crear_paciente(nombre, correo, contrasena, rut, telefono=None, id_direccion=
     if not nombre or len(nombre) > 100:
         raise ValueError("El nombre es obligatorio y no puede superar 100 caracteres.")
     _validar_correo(correo)
-    if not contrasena or len(contrasena) < 8:
-        raise ValueError("La contraseña debe tener al menos 8 caracteres.")
+    valido, mensaje = validar_contrasena(contrasena)
+    if not valido:
+        raise ValueError(mensaje)
     if not rut or len(rut) > 20:
         raise ValueError("El RUT es obligatorio y no puede superar 20 caracteres.")
     if telefono and len(telefono.strip()) > 20:
@@ -66,6 +70,7 @@ def consultar_paciente(id_paciente):
     return paciente
 
 
+@requiere_administrador
 def actualizar_paciente(id_paciente, nombre=None, correo=None, rut=None,
                         telefono=None, id_direccion=None, contrasena=None):
     paciente = consultar_paciente(id_paciente)
@@ -101,8 +106,9 @@ def actualizar_paciente(id_paciente, nombre=None, correo=None, rut=None,
     if id_direccion is not None:
         datos["id_direccion"] = _validar_direccion(id_direccion)
     if contrasena:
-        if len(contrasena) < 8:
-            raise ValueError("La contraseña debe tener al menos 8 caracteres.")
+        valido, mensaje = validar_contrasena(contrasena)
+        if not valido:
+            raise ValueError(mensaje)
         datos["contrasena"] = _hash_contrasena(contrasena)
     if not datos:
         raise ValueError("No se ingresaron campos para modificar.")
@@ -113,6 +119,7 @@ def actualizar_paciente(id_paciente, nombre=None, correo=None, rut=None,
         raise ValueError("No se pudo actualizar el paciente por una restricción de datos.") from exc
 
 
+@requiere_administrador
 def eliminar_paciente(id_paciente):
     paciente = consultar_paciente(id_paciente)
     if Turno.select().where(Turno.id_paciente == paciente.id_usuario_id).exists():

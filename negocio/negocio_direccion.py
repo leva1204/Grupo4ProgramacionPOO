@@ -1,3 +1,4 @@
+from seguridad.sesion import requiere_administrador
 from peewee import IntegrityError
 from datos.modelos.models import Usuario
 from datos.repositorios.repositorio_direccion import RepositorioDireccion
@@ -15,6 +16,7 @@ def _numero_casa(valor):
     if n<0: raise ValueError('El número de casa no puede ser negativo.')
     return n
 
+@requiere_administrador
 def crear_direccion(calle, comuna, ciudad, numero_casa=None):
     try: return RepositorioDireccion.guardar(_texto(calle,'La calle'),_texto(comuna,'La comuna'),_texto(ciudad,'La ciudad'),_numero_casa(numero_casa))
     except IntegrityError as exc: raise ValueError('No se pudo crear la dirección.') from exc
@@ -25,6 +27,7 @@ def consultar_direccion(id_direccion):
     if obj is None: raise ValueError('No se encontró la dirección.')
     return obj
 
+@requiere_administrador
 def actualizar_direccion(id_direccion, calle=None, comuna=None, ciudad=None, numero_casa=None):
     obj=consultar_direccion(id_direccion); datos={}
     for campo,valor in [('calle',calle),('comuna',comuna),('ciudad',ciudad)]:
@@ -35,6 +38,7 @@ def actualizar_direccion(id_direccion, calle=None, comuna=None, ciudad=None, num
     except IntegrityError as exc: raise ValueError('No se pudo actualizar la dirección.') from exc
     return consultar_direccion(obj.id_direccion)
 
+@requiere_administrador
 def eliminar_direccion(id_direccion):
     obj=consultar_direccion(id_direccion)
     if Usuario.select().where(Usuario.id_direccion==obj.id_direccion).exists(): raise ValueError('No se puede eliminar: hay usuarios asociados a esta dirección.')

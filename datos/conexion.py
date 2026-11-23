@@ -3,7 +3,7 @@ from peewee import MySQLDatabase
 
 def conectar_db():
     return MySQLDatabase(
-        config("db", default="turnomed"),
+        config("db", default="medica_in"),
         charset="utf8mb4",
         host=config("host", default="localhost"),
         port=config("port", default=3306, cast=int),

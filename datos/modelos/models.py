@@ -43,6 +43,7 @@ class Usuario(BaseModel):
     nombre = CharField(max_length=100)
     correo = CharField(max_length=100, unique=True)
     contrasena = CharField(max_length=225)
+    esadministrador = BooleanField(default=False, column_name="esadministrador")
 
     class Meta:
         table_name = "usuario"
@@ -77,6 +78,16 @@ class Medico(BaseModel):
     class Meta:
         table_name = "medico"
 
+class Enfermero(BaseModel):
+    id_usuario = ForeignKeyField(
+        Usuario, column_name="id_usuario", primary_key=True, backref="enfermero"
+    )
+    rut = CharField(max_length=12, unique=True)
+    telefono = CharField(max_length=20, null=True)
+    area = CharField(max_length=80)
+
+    class Meta:
+        table_name = "enfermero"
 
 class Horario(BaseModel):
     id_horario = AutoField()

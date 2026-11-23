@@ -1,3 +1,4 @@
+from seguridad.sesion import requiere_administrador
 from datetime import time
 from peewee import IntegrityError
 from datos.modelos.models import Agenda, Medico, Turno
@@ -32,6 +33,7 @@ def _validar_referencias(id_agenda, id_medico):
     return agenda.id_agenda, medico.id_usuario
 
 
+@requiere_administrador
 def crear_horario(dia, horario_inicio, horario_fin, id_agenda, id_medico, disponible=True):
     dia_ingresado = (dia or "").strip().lower()
     if dia_ingresado not in DIAS:
@@ -60,6 +62,7 @@ def consultar_horario(id_horario):
     return horario
 
 
+@requiere_administrador
 def actualizar_horario(id_horario, dia=None, horario_inicio=None, horario_fin=None,
                         id_agenda=None, id_medico=None, disponible=None):
     actual = consultar_horario(id_horario)
@@ -93,6 +96,7 @@ def actualizar_horario(id_horario, dia=None, horario_inicio=None, horario_fin=No
         raise ValueError("No se pudo actualizar el horario.") from exc
 
 
+@requiere_administrador
 def eliminar_horario(id_horario):
     horario = consultar_horario(id_horario)
     dias_por_numero = {

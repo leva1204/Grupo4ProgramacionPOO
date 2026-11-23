@@ -82,3 +82,11 @@ def validar_rut(rut):
         dv_calculado = str(dv_esperado)
 
     return dv_ingresado == dv_calculado
+
+def validar_contrasena(contrasena):
+    """Valida la contraseña con el mínimo de 8 caracteres usado por el sistema."""
+    if not contrasena:
+        return False, "La contraseña es obligatoria."
+    if len(contrasena) < 8:
+        return False, "La contraseña debe tener al menos 8 caracteres."
+    return True, "Contraseña válida"

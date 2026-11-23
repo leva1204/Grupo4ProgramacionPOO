@@ -1,3 +1,4 @@
+from seguridad.sesion import requiere_administrador
 from datetime import date, time, datetime
 from peewee import IntegrityError
 from datos.modelos.models import Usuario, Medico, Agenda, Horario
@@ -68,6 +69,7 @@ def _validar_disponibilidad(fecha, hora, id_medico, id_agenda, excluir=None):
         raise ValueError("El médico ya tiene un turno reservado para esa fecha y hora.")
 
 
+@requiere_administrador
 def crear_turno(fecha, hora, id_paciente, id_medico, id_agenda, estado="Reservado"):
     fecha, hora = _fecha(fecha), _hora(hora)
     if estado not in ESTADOS:
@@ -93,6 +95,7 @@ def consultar_turno(id_turno):
     return turno
 
 
+@requiere_administrador
 def actualizar_turno(id_turno, fecha=None, hora=None, id_paciente=None,
                      id_medico=None, id_agenda=None, estado=None):
     actual = consultar_turno(id_turno)
@@ -122,6 +125,7 @@ def actualizar_turno(id_turno, fecha=None, hora=None, id_paciente=None,
         raise ValueError("No se pudo actualizar el turno.") from exc
 
 
+@requiere_administrador
 def eliminar_turno(id_turno):
     turno = consultar_turno(id_turno)
     try:
