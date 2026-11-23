@@ -4,5 +4,4 @@ from negocio.negocio_horario import crear_horario, listar_horarios, listar_horar
 from negocio.negocio_direccion import crear_direccion, listar_direcciones, consultar_direccion, actualizar_direccion, eliminar_direccion
 from negocio.negocio_especialidad import crear_especialidad, listar_especialidades, consultar_especialidad, actualizar_especialidad, eliminar_especialidad
 from negocio.negocio_usuario import crear_usuario, listar_usuarios, consultar_usuario, actualizar_usuario, eliminar_usuario
-from negocio.negocio_medico import crear_medico, listar_medicos, consultar_medico, actualizar_medico, eliminar_medico
 from negocio.negocio_agenda import crear_agenda, listar_agendas, consultar_agenda, actualizar_agenda, eliminar_agenda

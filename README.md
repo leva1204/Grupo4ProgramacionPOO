@@ -17,3 +17,12 @@
 5. Configurar `.env` con las claves `db`, `host`, `port`, `user` y `password`.
 6. Desde la carpeta raíz del proyecto, ejecutar `python app.py`.
 
+
+
+### Cierre de sesión y administración de perfiles
+
+- **Cerrar sesión** termina la sesión actual y vuelve a solicitar credenciales; no cierra el programa.
+- **Salir** cierra la aplicación.
+- En **Gestión de Usuarios** se agregó **Cambiar perfil**, para asignar a otra cuenta el rol de Administrador o Usuario estándar.
+- Por seguridad, una cuenta no puede cambiar su propio perfil mientras mantiene la sesión activa.
+- El cambio de perfil está protegido en la capa de negocio y requiere una sesión de administrador.

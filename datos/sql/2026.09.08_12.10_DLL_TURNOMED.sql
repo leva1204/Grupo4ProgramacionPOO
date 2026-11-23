@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS turnomed;
-CREATE DATABASE turnomed;
+DROP DATABASE IF EXISTS medica_in;
+CREATE DATABASE medica_in;
 
-USE turnomed;
+USE medica_in;
 
 CREATE TABLE Direccion (
     id_direccion INT AUTO_INCREMENT PRIMARY KEY,
@@ -21,11 +21,13 @@ CREATE TABLE Usuario (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE,
-    contrasena VARCHAR(225) NOT NULL
+    contrasena VARCHAR(225) NOT NULL,
+    esadministrador TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE pacientes (
     id_usuario INT PRIMARY KEY,
+    nombre_paciente VARCHAR(100) NOT NULL,
     rut VARCHAR(20) NOT NULL UNIQUE,
     telefono VARCHAR(20),
     id_direccion INT NOT NULL,
@@ -37,12 +39,22 @@ CREATE TABLE pacientes (
 
 CREATE TABLE Medico (
     id_usuario INT PRIMARY KEY,
+    nombre_medico VARCHAR(100) NOT NULL,
     numero_formacion VARCHAR(50) NOT NULL UNIQUE,
     id_especialidad INT NOT NULL,
     CONSTRAINT fk_medico_usuario FOREIGN KEY (id_usuario)
         REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
     CONSTRAINT fk_medico_especialidad FOREIGN KEY (id_especialidad)
         REFERENCES Especialidad(id_especialidad)
+);
+
+CREATE TABLE enfermero (
+    id_usuario INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    rut VARCHAR(12) NOT NULL UNIQUE,
+    telefono VARCHAR(20) NULL,
+    area VARCHAR(80) NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
 CREATE TABLE Agenda (
@@ -79,3 +91,7 @@ CREATE TABLE Turno (
     CONSTRAINT fk_turno_agenda FOREIGN KEY (id_agenda)
         REFERENCES Agenda(id_agenda)
 );
+
+-- por razones de debuggeo y para probar el programa, ya viene incluido un usuario administrador
+INSERT INTO Usuario (nombre, correo, contrasena, esadministrador) VALUES
+('Juanito Administrador Ramirez', 'juanito.administrador@email.cl', '680eb27f434bab4f840f9cc39ba3e74e395641f07ebdec6ab495425b562aa88a', 1);
